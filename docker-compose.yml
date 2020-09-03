@@ -1,0 +1,33 @@
+version: "3.8"
+services: 
+    nginx:
+        container_name: "laravel-nginx"
+        image: nginx
+        restart: always
+        depends_on:
+            - php
+            - db
+        ports: 
+            - 8080:80
+        links: 
+            - php
+        volumes: 
+            - ./blog:/var/www/blog
+            - ./nginx/conf.d:/etc/nginx/conf.d/
+    php:
+        container_name: "laravel-php"
+        build:
+            context: ./php
+        volumes: 
+            - ./blog:/var/www/blog
+    db:
+        container_name: "laravel-mariadb"
+        image: mariadb
+        volumes:
+            - ./db_data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 5upers3curer00tp@ssw0rd5
+            MYSQL_DATABASE: laravel_blog
+            MYSQL_USER: sample
+            MYSQL_PASSWORD: 5upers3curep@ssw0rd5
